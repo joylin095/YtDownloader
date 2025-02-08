@@ -7,7 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\Js\jquery-3.7.1.min.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="jQuery" Version="3.7.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Scripts\" />
+    <Folder Include="wwwroot\downloads\" />
   </ItemGroup>
 
 </Project>

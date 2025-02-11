@@ -68,7 +68,7 @@ namespace YtDownloader.Controllers
                 DownloadResult? jsonResult = JsonSerializer.Deserialize<DownloadResult>(output);
 
                 string? title = jsonResult?.Title;
-                string? fileName = Path.GetFileName(jsonResult?.Filepath);
+                string? fileName = Path.GetFileName(jsonResult?.Zip);
                 string downloadUrl = $"/downloads/{fileName}";
 
                 return Ok(new { success = true, title, fileName, downloadUrl });
@@ -88,5 +88,6 @@ namespace YtDownloader.Controllers
     {
         public string? Title { get; set; }
         public string? Filepath { get; set; }
+        public string? Zip { get; set; }
     }
 }

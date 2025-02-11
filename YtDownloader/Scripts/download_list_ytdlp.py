@@ -1,4 +1,5 @@
 import sys
+import zipfile
 import yt_dlp
 import os
 import json
@@ -16,18 +17,26 @@ def download_file(youtube_url, output_dir):
         'no_warnings': True
     }
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        info_dict = ydl.extract_info(youtube_url, download=True)
+        infoDict = ydl.extract_info(youtube_url, download=True)
+        infoList = infoDict.get("entries",None)
+        filePathList = []
 
-        info = info_dict.get("entries",None)
-        if info is None:
-            result = {
-                "Title": info_dict['title'],
-                "Filepath": info_dict['requested_downloads'][0]['filepath']
-            }
-            return json.dumps(result,ensure_ascii = False)
-        # for i in info:
-        #     print(f"Downloaded: {i['title']}")
-        #     print(f"Downloaded to: {i['requested_downloads'][0]['filepath']}")
+        if infoList is None:
+            filePathList.append(infoDict['requested_downloads'][0]['filepath'])
+        else:
+            for i in infoList:
+                filePathList.append(i['requested_downloads'][0]['filepath'])
+
+        zip_filename = os.path.join(output_dir, "playlist.zip")
+        with zipfile.ZipFile(zip_filename, 'w') as zipf:
+            for f in filePathList:
+                zipf.write(f, os.path.basename(f))
+
+        #"Title": infoDict['title']
+        result = {
+            "Zip": zip_filename
+        }
+        return json.dumps(result,ensure_ascii = False)
 
 if __name__ == "__main__":
     if len(sys.argv) < 3:
